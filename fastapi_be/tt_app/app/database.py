@@ -12,4 +12,4 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Define the `Base` class of ORM
 Base = declarative_base()
 
-from .models import User, Item, Project
+# from .models import User, Item, Project

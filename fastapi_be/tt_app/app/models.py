@@ -44,5 +44,5 @@ class Item(Base):
     owner = relationship("User", foreign_keys=[owner_id], backref='own_items')
     creator = relationship("User", foreign_keys=[creator_id], backref='create_items')
     last_updater = relationship("User", foreign_keys=[last_updater_id])
-    childern = relationship("Item", backref=backref('parent', remote_side=[id]))
+    children = relationship("Item", backref=backref('parent', remote_side=[id]))
     project = relationship("Project", back_populates="items")
