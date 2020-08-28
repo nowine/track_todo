@@ -23,6 +23,7 @@ class User(UserBase):
     id: int
 
     class Config:
+        arbitrary_types_allowed = True
         orm_mode = True
 
 
@@ -42,6 +43,7 @@ class Project(ProjectBase):
     id: int
 
     class Config:
+        arbitrary_types_allowed = True
         orm_mode = True
 
 
