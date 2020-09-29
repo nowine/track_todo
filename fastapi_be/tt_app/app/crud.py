@@ -53,7 +53,7 @@ def update_item(db: Session, db_item: models.Item, data_item: schemas.ItemUpdate
     db.refresh(db_item)
     return db_item
 
-def delete_item(db: Session, id: int) -> models.Item:
+def delete_item(db: Session, id: int) -> schemas.Item:
     obj = db.query(models.Item).get(id)
     if obj:
         db.delete(obj)
