@@ -9,7 +9,7 @@ class Item(Base):
 
     id = Column(Integer, Sequence('items_id_seq'), primary_key=True, index=True)
     subject = Column(String(150), nullable=False)
-    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    owner_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
     creator_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     target_completion = Column(DateTime, nullable=True)

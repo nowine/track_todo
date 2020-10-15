@@ -22,7 +22,7 @@ project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 print(project_path)
 print(sys.path.append(project_path))
 
-from app.database import Base
+from app.db.database import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -36,6 +36,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+from app.models import item, user, project
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

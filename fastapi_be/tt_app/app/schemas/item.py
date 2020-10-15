@@ -20,17 +20,15 @@ class ItemBase(BaseModel):
     detail: Optional[str] = None
     owner_id: int
     creator_id: int
-    last_updater_id: int
+    # last_updater_id: int
     parent_id: Optional[int] = None
     project_id: Optional[int] = None
     status: str
 
 
 class ItemCreate(ItemBase):
-    pass
-    '''
     last_updater_id: Optional[int] = None
-
+    '''
     @validator('last_updater_id', pre=True)
     def default_last_updater_id(cls, v: Optional[int], values: Dict[str, Any]) -> Any:
         #Validate if last_updater_id is provided, if not, then format it as creator_id 
@@ -46,6 +44,7 @@ class ItemCreate(ItemBase):
 
 class ItemUpdate(ItemBase):
     id: int 
+    last_updater_id: int
 
     #TODO - Need to add validator to ensure last_updater_id is provided for update. 
 
@@ -64,9 +63,9 @@ class ItemDeleted(ItemUpdate):
         orm_mode = True
 
 
-class Item(ItemBase):
-    id: int
-    #last_updater_id: int
+class Item(ItemUpdate):
+    # id: int
+    # last_updater_id: int
     created_at: datetime
     last_updated_by: datetime
     owner: User
