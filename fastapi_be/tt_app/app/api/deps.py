@@ -1,8 +1,17 @@
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt
+from pydantic import ValidationError
 
+from app.core import security
+from app.core.config import settings
 from app.db.database import SessionLocal
-from app import models, crud
+from app import models, crud, schemas
+
+reusable_oauth2 = OAuth2PasswordBearer(
+    tokenUrl="/v1/login/access-token"
+)
 
 def get_db():
     db = SessionLocal()
@@ -11,11 +20,38 @@ def get_db():
     finally:
         db.close()
 
+
 def get_current_user(
     db: Session = Depends(get_db),
-    user_id: str = 0
+    token: str = Depends(reusable_oauth2)
     ) -> models.User:
-    user = crud.user.get(db, id=user_id)
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
+        )
+        token_data = schemas.TokenPayLoad(**payload)
+    except (jwt.JWSError, ValidationError):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="Could Not Validate Credentials",
+        )
+    user = crud.user.get(db, id=token_data.sub)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
+def get_current_active_user(
+    current_user: models.User = Depends(get_current_user)
+) -> models.User:
+    if not crud.user.is_active(current_user):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive User")
+    return current_user
+
+
+def get_current_superuser(
+    current_user: models.User = Depends(get_current_user)
+) -> models.User:
+    if not crud.user.is_superuser(current_user):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="The user doesn't have enough privileges")
+    return current_user

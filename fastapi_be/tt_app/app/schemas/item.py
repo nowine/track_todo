@@ -68,16 +68,17 @@ class Item(ItemUpdate):
     # last_updater_id: int
     created_at: datetime
     last_updated_by: datetime
-    owner: User
-    creator: User
-    last_updater: User
+    # Do not return user object directly as it will return with password string also. 
+    # owner: Any
+    # creator: Any
+    # last_updater: Any
     # Self-referring Type annotation, use the string for replacement first.
     # children: List['Item'] = []
     # parent: 'Item' = None
-    # Do not specify children and parent with `Item` schema, otherwise, it will cause recursive loop trying to extract the parent's children' parent...
+    # Do not specify children and parent with `Item` schema together, otherwise, it will cause recursive loop trying to extract the parent's children' parent...
     children: List[Any] = []
-    parent: Optional[Any] = None 
-    project: Optional[Project] = None
+    # parent: Optional[Any] = None 
+    # project: Optional[Project] = None
     class Config:
         arbitrary_types_allowed = True
         orm_mode = True

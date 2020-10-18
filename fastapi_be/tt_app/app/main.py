@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, logger
 from sqlalchemy.orm import Session
 
 from . import crud, schemas, models

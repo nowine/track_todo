@@ -1,3 +1,4 @@
+import secrets
 from pydantic import BaseSettings, PostgresDsn
 
 '''
@@ -9,6 +10,13 @@ from pydantic import BaseSettings, PostgresDsn
 class Settings(BaseSettings):
     #SQLALCHEMY_DATABASE_URL: PostgresDsn = "postgresql+psycopg2://pi:Nil0911@192.168.31.193:5432/track_todo"
     SQLALCHEMY_DATABASE_URL: PostgresDsn = "postgresql://pi:Nil0911@192.168.31.193:5432/track_todo"
+
+    # Random string to be added to the original password for encryption
+    SALT: str = 'jsfh2o2rad@#'
+    # Secret key for token encoding
+    SECRET_KEY: str = secrets.token_urlsafe(32)
+    # The default expiry time of the access token 
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24
 
     class Config:
         case_sensitive = True

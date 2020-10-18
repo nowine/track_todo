@@ -38,7 +38,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def authenticate(self, db:Session, *, email: EmailStr, password: str) -> Optional[User]:
         user = self.get_by_email(db, email=email)
-        if not User:
+        if not user:
             return None
         if not check_encrypted_password(password, user.hashed_password):
             return None
@@ -48,7 +48,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return user.is_superuser
 
     def is_active(self, user:User) -> bool:
-        return user.is_superuser
+        return user.is_active
 
 
 user = CRUDUser(User)
